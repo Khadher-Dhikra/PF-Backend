@@ -21,10 +21,19 @@ class PasswordResetController {
 
     // ================================================
     // TT-61 : Génération du token sécurisé
-    // ================================================
+    // ===========================================
     public function genererToken($email) {
 
+        $token     = bin2hex(random_bytes(32));
+        $expiresAt = date('Y-m-d H:i:s', time() + 3600);
+
+        $this->model->deleteOldTokens($email);
+        $this->model->saveToken($email, $token, $expiresAt);
+
+        return $token;
     }
+
+    
 
     // ================================================
     // Méthode principale TT-60 → TT-61 → TT-62
