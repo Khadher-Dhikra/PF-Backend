@@ -16,13 +16,25 @@ class PasswordReset {
 
     // TT-61 : Supprimer anciens tokens
     public function deleteOldTokens($email) {
-        
+        $query = "DELETE FROM " . $this->resetTable . "
+                  WHERE email = :email";
+        $stmt  = $this->conn->prepare($query);
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
     }
 
     // TT-61 : Sauvegarder token
     public function saveToken($email, $token, $expiresAt) {
-        
+        $query = "INSERT INTO " . $this->resetTable . "
+                  (email, token, expires_at)
+                  VALUES (:email, :token, :expires_at)";
+        $stmt  = $this->conn->prepare($query);
+        $stmt->bindParam(":email",      $email);
+        $stmt->bindParam(":token",      $token);
+        $stmt->bindParam(":expires_at", $expiresAt);
+        $stmt->execute();
     }
+    
 
     // TT-62 : Envoyer email
     public function sendResetEmail($email, $token) {
