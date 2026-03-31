@@ -17,7 +17,27 @@ class PasswordResetController {
     // ================================================
     public function verifierEmail($email) {
 
+        if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            echo json_encode([
+                "status"  => "error",
+                "message" => "Invalid email"
+            ]);
+            return null;
+        }
+
+        $user = $this->model->findUserByEmail($email);
+
+        if (!$user) {
+            echo json_encode([
+                "status"  => "success",
+                "message" => "If this email exists, a reset link will be sent"
+            ]);
+            return null;
+        }
+
+        return $user;
     }
+    
 
     // ================================================
     // TT-61 : Génération du token sécurisé
