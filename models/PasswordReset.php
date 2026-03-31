@@ -11,7 +11,12 @@ class PasswordReset {
 
     // TT-60 : Chercher utilisateur par email
     public function findUserByEmail($email) {
-      
+        $query = "SELECT id, email FROM " . $this->table . "
+                  WHERE email = :email LIMIT 1";
+        $stmt  = $this->conn->prepare($query);
+        $stmt->bindParam(":email", $email);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 
     // TT-61 : Supprimer anciens tokens
