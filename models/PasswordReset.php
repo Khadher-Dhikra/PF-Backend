@@ -39,11 +39,25 @@ class PasswordReset {
         $stmt->bindParam(":expires_at", $expiresAt);
         $stmt->execute();
     }
-    
 
     // TT-62 : Envoyer email
     public function sendResetEmail($email, $token) {
-       
+        $resetLink = "http://localhost:5173/reset-password?token=" . $token;
+
+        $to      = $email;
+        $subject = "Password Reset - TopG Team";
+        $message = "
+            <h3>Password Reset Request</h3>
+            <p>Click the link below to reset your password:</p>
+            <a href='{$resetLink}'>Reset my password</a>
+            <p>This link expires in <strong>1 hour</strong>.</p>
+            <p>If you did not request this, ignore this email.</p>
+        ";
+        $headers  = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: no-reply@topgteam.com\r\n";
+
+        return mail($to, $subject, $message, $headers);
     }
 
     // TT-64 : Trouver token valide

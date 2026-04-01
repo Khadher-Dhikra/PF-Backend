@@ -37,11 +37,10 @@ class PasswordResetController {
 
         return $user;
     }
-    
 
     // ================================================
     // TT-61 : Génération du token sécurisé
-    // ===========================================
+    // ================================================
     public function genererToken($email) {
 
         $token     = bin2hex(random_bytes(32));
@@ -53,7 +52,23 @@ class PasswordResetController {
         return $token;
     }
 
-    
+    // ================================================
+    // TT-62 : Envoi de l'email automatique
+    // ================================================
+    public function envoyerEmail($email, $token) {
+
+        $sent = $this->model->sendResetEmail($email, $token);
+
+        if (!$sent) {
+            echo json_encode([
+                "status"  => "error",
+                "message" => "Failed to send email"
+            ]);
+            return false;
+        }
+
+        return true;
+    }
 
     // ================================================
     // Méthode principale TT-60 → TT-61 → TT-62
