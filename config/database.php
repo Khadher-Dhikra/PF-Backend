@@ -1,9 +1,11 @@
 <?php
+require_once "../cors.php";
+date_default_timezone_set('UTC');
 class Database {
     private $host = "localhost";
     private $db_name = "pf_db";
     private $username = "root";
-    private $password = "";
+    private $password = "baha@0810";
     public $conn;
 
     public function connect() {
