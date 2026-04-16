@@ -1,6 +1,6 @@
 <?php
 require_once "../cors.php";
-require_once "../middleware/AuthMiddleware.php";
+require_once "../middlewares/AuthMiddleware.php";
 
 $user = AuthMiddleware::verify();
 

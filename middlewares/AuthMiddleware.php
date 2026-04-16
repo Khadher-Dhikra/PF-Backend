@@ -2,9 +2,11 @@
 
 require_once __DIR__ . '/../config/jwt.php';
 
-class AuthMiddleware {
+class AuthMiddleware
+{
 
-    public static function verify() {
+    public static function verify()
+    {
         $headers = getallheaders();
 
         if (!isset($headers['Authorization'])) {
