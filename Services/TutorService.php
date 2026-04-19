@@ -12,20 +12,26 @@ class TutorService
     }
 
     //get tutor students
-    public function getTutorStudentsList(){
+    public function getTutorStudentsList($user)
+    {
         $userId = $user->data->id;
 
         return $this->getStudents($userId);
     }
 
-    private function getStudents() {
+    private function getStudents($userId)
+    {
         $stmt = $this->db->prepare("
-            SELECT u.username as student_name
+            SELECT
+                u.username as student_name,
+                pr.title as project_title,
+                pr.progress,
+                pr.status
             FROM users u
             JOIN students s ON s.user_id = u.id
             JOIN project_students ps ON s.id = ps.student_id
             JOIN projects pr ON ps.project_id = pr.id
-            JOIN tutor tu ON pr.tutor_id = tu.id
+            JOIN tutors tu ON pr.tutor_id = tu.id
             WHERE tu.user_id = ?
         ");
         $stmt->execute([$userId]);
@@ -34,9 +40,6 @@ class TutorService
         return [
             "status" => "success",
             "students" => $students,
-            // "project" => $reports,
-            // "progress" => (int)$progress,
-            // "stats" => $stats,
         ];
     }
 }
