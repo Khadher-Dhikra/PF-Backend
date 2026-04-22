@@ -102,7 +102,9 @@ PF-Backend/
    ```
 
 5. **Configure environment**  
-   Edit `.env`:
+   For security reasons, the `.env` file is not included in this repository.
+
+   Please create a ".env" file and use the following structure:
    ```env
    DB_HOST=localhost
    DB_NAME=pf_db
@@ -110,6 +112,7 @@ PF-Backend/
    DB_PASS=
    JWT_SECRET=your_secret_key
    ```
+   «⚠️ The actual ".env" file with real credentials will be sent to the instructor via email.»
 
 6. **Access the API**  
    ```
