@@ -1,0 +1,38 @@
+name: Auto Tag Version
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag
+        run: |
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0")
+          echo "LATEST_TAG=$TAG" >> $GITHUB_ENV
+          echo "Current tag: $TAG"
+
+      - name: Bump patch version
+        run: |
+          IFS='.' read -r MAJ MIN PATCH <<< "${LATEST_TAG#v}"
+          PATCH=$((PATCH+1))
+          NEW_TAG="v$MAJ.$MIN.$PATCH"
+          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
+          echo "New tag: $NEW_TAG"
+
+      - name: Create and push tag
+        run: |
+          git tag $NEW_TAG
+          git push origin $NEW_TAG
